@@ -19,6 +19,7 @@ notebook>=6.5.0
 
 # Dashboard
 streamlit>=1.28.0
+plotly>=5.14.0
 
 # Testing
 pytest>=7.2.0

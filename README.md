@@ -1,6 +1,6 @@
 # Ethiopia Financial Inclusion Forecasting
 
-Project for forecasting financial inclusion in Ethiopia using comprehensive data exploration, analysis, and modeling.
+Project for forecasting financial inclusion in Ethiopia using comprehensive data exploration, analysis, modeling, and interactive visualization.
 
 ## Project Structure
 
@@ -23,9 +23,10 @@ Project for forecasting financial inclusion in Ethiopia using comprehensive data
 │   ├── task1_data_exploration.py  # Task 1: OOP data exploration & enrichment
 │   ├── task2_eda.py                # Task 2: OOP exploratory data analysis
 │   ├── task3_impact_modeling.py    # Task 3: OOP event impact modeling
-│   └── task4_forecasting.py         # Task 4: OOP forecasting module
+│   ├── task4_forecasting.py         # Task 4: OOP forecasting module
+│   └── dashboard_components.py      # Task 5: Dashboard components
 ├── dashboard/
-│   └── app.py                      # Streamlit dashboard
+│   └── app.py                      # Streamlit dashboard application
 ├── tests/
 │   └── __init__.py
 ├── models/                         # Trained models
@@ -51,33 +52,80 @@ pip install -r requirements.txt
 
 ## Usage
 
-### Task 1: Data Exploration and Enrichment
+### Task 5: Dashboard Development (Main Interface)
 
-The project includes an OOP-based module for exploring and enriching the dataset.
+Interactive Streamlit dashboard for exploring data, understanding event impacts, and viewing forecasts.
 
 #### Quick Start
 
+```bash
+# Install dependencies (if not already installed)
+pip install -r requirements.txt
+
+# Run the dashboard
+streamlit run dashboard/app.py
+```
+
+The dashboard will open in your default web browser at `http://localhost:8501`
+
+#### Dashboard Pages
+
+**1. Overview Page:**
+- Key metrics summary cards (current values, trends)
+- P2P/ATM Crossover Ratio indicator
+- Growth rate highlights
+- Quick insights and data download
+
+**2. Trends Page:**
+- Interactive time series plots with Plotly
+- Date range selector
+- Pillar filter (Access, Usage, Quality)
+- Channel comparison view
+- Event timeline overlay
+- Filtered data download
+
+**3. Forecasts Page:**
+- Forecast visualizations with confidence intervals
+- Model selection (Linear Trend, Event-Augmented, All Models)
+- Key projected milestones
+- Forecast table with confidence intervals
+- Forecast data download
+
+**4. Inclusion Projections Page:**
+- Financial inclusion rate projections
+- Progress toward target visualization (default 60%)
+- Scenario selector (Optimistic, Base, Pessimistic)
+- Gap analysis to target
+- Scenario comparison charts
+- Answers to consortium's key questions
+
+#### Technical Features
+
+- **OOP Architecture**: `DashboardDataLoader` and `DashboardVisualizations` classes
+- **Interactive Visualizations**: Plotly charts with hover, zoom, and pan
+- **Data Download**: CSV export functionality on all pages
+- **Caching**: Efficient data loading with Streamlit caching
+- **Responsive Design**: Wide layout optimized for data visualization
+- **Logging**: Comprehensive logging throughout
+
+#### Dashboard Components
+
+- `src/dashboard_components.py`: OOP-based dashboard components
+- `dashboard/app.py`: Main Streamlit application
+
+### Task 1: Data Exploration and Enrichment
+
+OOP-based module for exploring and enriching the dataset.
+
 ```python
-import sys
-from pathlib import Path
-import logging
+from task1_data_exploration import Task1DataProcessor, ObservationRecord, ConfidenceLevel
 
-sys.path.append(str(Path('src').resolve()))
-from task1_data_exploration import (
-    Task1DataProcessor,
-    ObservationRecord,
-    EventRecord,
-    ImpactLinkRecord,
-    ConfidenceLevel
-)
-
-# Initialize processor
 processor = Task1DataProcessor(
     data_file=Path('data/raw/ethiopia_fi_unified_data.xlsx'),
     reference_codes_file=Path('data/raw/reference_codes.xlsx')
 )
 
-# Run full exploration
+# Run exploration
 results = processor.run_full_exploration()
 
 # Add new observation
@@ -95,124 +143,38 @@ observation = ObservationRecord(
     notes='Important baseline'
 )
 processor.enricher.add_observation(observation)
-
-# Save enriched dataset
-processor.enrich_and_save(Path('data/processed/enriched.xlsx'))
 ```
 
-#### Features
-
-- **DataExplorer**: Comprehensive data exploration and analysis
-- **DataEnricher**: Add new observations, events, and impact links
-- **Type Safety**: Dataclasses and enums for type safety
-- **Logging**: Comprehensive logging throughout
-- **Jupyter Notebooks**: Interactive exploration and enrichment workflows
-
-#### Notebooks
-
-- `notebooks/01_data_exploration.ipynb`: Complete data exploration workflow
-- `notebooks/02_data_enrichment.ipynb`: Data enrichment with examples
+**Notebooks**: `01_data_exploration.ipynb`, `02_data_enrichment.ipynb`
 
 ### Task 2: Exploratory Data Analysis
 
-Comprehensive EDA module for analyzing financial inclusion patterns in Ethiopia.
-
-#### Quick Start
+Comprehensive EDA module for analyzing financial inclusion patterns.
 
 ```python
-import sys
-from pathlib import Path
-import logging
-
-sys.path.append(str(Path('src').resolve()))
 from task2_eda import ExploratoryDataAnalyzer
 
-# Initialize analyzer
 eda = ExploratoryDataAnalyzer(
     data_file=Path('data/raw/ethiopia_fi_unified_data.xlsx'),
-    reference_codes_file=Path('data/raw/reference_codes.xlsx'),
     figure_dir=Path('reports/figures')
 )
 
-# Run full EDA pipeline
+# Run full EDA
 results = eda.run_full_eda()
 ```
 
-#### Features
-
-- **Dataset Overview**: Summarize by record_type, pillar, source_type, temporal coverage
-- **Access Analysis**: Account ownership trajectory, growth rates, gender gap, urban/rural
-- **Usage Analysis**: Mobile money trends, digital payments, registered vs active gap
-- **Infrastructure Analysis**: 4G coverage, mobile penetration, ATM density
-- **Event Timeline**: Visualize events and overlay on indicator trends
-- **Correlation Analysis**: Examine relationships between indicators
-- **Insight Generation**: Automatic insight generation and data quality assessment
-
-#### Analysis Capabilities
-
-1. **Dataset Overview**
-   - Record type, pillar, and source type distributions
-   - Temporal coverage visualization
-   - Data gaps identification
-   - Confidence level assessment
-
-2. **Access Analysis**
-   - Account ownership trajectory (2011-2024)
-   - Growth rate calculations between survey years
-   - Gender gap analysis (male vs female)
-   - Urban vs rural comparison
-   - 2021-2024 slowdown investigation
-
-3. **Usage Analysis**
-   - Mobile money account penetration (2014-2024)
-   - Digital payment adoption patterns
-   - Registered vs active account gap
-   - Payment use cases (P2P, merchant, bill pay, wages)
-
-4. **Infrastructure and Enablers**
-   - 4G coverage analysis
-   - Mobile penetration trends
-   - ATM density analysis
-   - Relationships with inclusion outcomes
-   - Leading indicators identification
-
-5. **Event Timeline**
-   - Timeline visualization of all cataloged events
-   - Overlay events on indicator trend charts
-   - Identify relationships (e.g., Telebirr launch, M-Pesa entry, Safaricom entry)
-
-6. **Correlation Analysis**
-   - Correlation matrix between indicators
-   - Identify factors associated with Access and Usage
-   - Analyze existing impact_link records
-
-#### Notebook
-
-- `notebooks/03_eda.ipynb`: Complete EDA workflow with all visualizations
+**Notebook**: `03_eda.ipynb`
 
 ### Task 3: Event Impact Modeling
 
-Model how events (policies, product launches, infrastructure investments) affect financial inclusion indicators.
-
-#### Quick Start
+Model how events affect financial inclusion indicators.
 
 ```python
-import sys
-from pathlib import Path
-import logging
-
-sys.path.append(str(Path('src').resolve()))
 from task3_impact_modeling import EventImpactModeler
 
-# Initialize modeler
 modeler = EventImpactModeler(
-    data_file=Path('data/raw/ethiopia_fi_unified_data.xlsx'),
-    figure_dir=Path('reports/figures')
+    data_file=Path('data/raw/ethiopia_fi_unified_data.xlsx')
 )
-
-# Load and join data
-modeler.load_data()
-modeler.join_impact_with_events()
 
 # Build association matrix
 matrix = modeler.build_association_matrix()
@@ -227,121 +189,37 @@ validation = modeler.validate_against_historical(
 )
 ```
 
-#### Features
-
-- **Impact Data Integration**: Join impact_links with events using parent_id
-- **Association Matrix**: Build event-indicator matrix showing which events affect which indicators
-- **Effect Modeling**: Model effects over time (immediate, gradual, delayed)
-- **Effect Combination**: Combine effects from multiple events (additive, multiplicative, max)
-- **Historical Validation**: Test model predictions against observed data
-- **Estimate Refinement**: Refine impact estimates based on validation results
-- **Comparable Evidence**: Framework for incorporating evidence from similar contexts
-- **Methodology Documentation**: Automatic documentation of assumptions and limitations
-
-#### Analysis Capabilities
-
-1. **Impact Understanding**
-   - Load and join impact_links with events
-   - Summarize which events affect which indicators
-   - Analyze impact directions and magnitudes
-
-2. **Association Matrix**
-   - Build event-indicator association matrix
-   - Visualize as heatmap
-   - Identify key relationships
-
-3. **Effect Modeling**
-   - Immediate effects (instant impact)
-   - Gradual effects (build over time)
-   - Delayed effects (after lag period)
-
-4. **Effect Combination**
-   - Additive combination (sum of effects)
-   - Multiplicative combination (compound effects)
-   - Maximum effect (take max)
-
-5. **Validation**
-   - Compare predictions with historical data
-   - Calculate alignment metrics
-   - Identify areas needing refinement
-
-6. **Refinement**
-   - Adjust estimates based on validation
-   - Document reasoning for changes
-   - Track confidence levels
-
-#### Notebook
-
-- `notebooks/04_impact_modeling.ipynb`: Complete impact modeling workflow
+**Notebook**: `04_impact_modeling.ipynb`
 
 ### Task 4: Forecasting Access and Usage
 
-Forecast Account Ownership (Access) and Digital Payment Usage for 2025-2027.
-
-#### Quick Start
+Forecast Account Ownership and Digital Payment Usage for 2025-2027.
 
 ```python
-import sys
-from pathlib import Path
-import logging
-
-sys.path.append(str(Path('src').resolve()))
 from task4_forecasting import FinancialInclusionForecaster
 
-# Initialize forecaster
 forecaster = FinancialInclusionForecaster(
     data_file=Path('data/raw/ethiopia_fi_unified_data.xlsx'),
-    impact_model_file=Path('data/processed/association_matrix.csv'),
-    figure_dir=Path('reports/figures')
+    impact_model_file=Path('data/processed/association_matrix.csv')
 )
-
-# Extract time series
-series = forecaster.extract_indicator_series('ACC_OWNERSHIP', pillar='access')
 
 # Generate forecast
-forecast = forecaster.linear_trend_forecast(
-    series=series,
-    forecast_years=[2025, 2026, 2027]
-)
+series = forecaster.extract_indicator_series('ACC_OWNERSHIP', pillar='access')
+forecast = forecaster.linear_trend_forecast(series, [2025, 2026, 2027])
 
 # Generate scenarios
 scenarios = forecaster.scenario_forecast(forecast)
 ```
 
-#### Features
+**Notebook**: `05_forecasting.ipynb`
 
-- **Trend Regression**: Linear and logarithmic trend forecasting
-- **Event-Augmented Model**: Combine trend with event impacts
-- **Scenario Analysis**: Optimistic, base, and pessimistic scenarios
-- **Confidence Intervals**: Quantify uncertainty in forecasts
-- **Visualization**: Forecast charts with historical data and confidence bands
-- **Forecast Tables**: Comprehensive tables with all scenarios
-
-#### Forecasting Methods
-
-1. **Linear Trend**: Simple linear regression on historical data
-2. **Log Trend**: Logarithmic transformation for non-linear growth
-3. **Event-Augmented**: Trend + event effects from impact model
-4. **Scenarios**: Multiple scenarios with different multipliers
-
-#### Output
-
-- Forecast tables with confidence intervals
-- Scenario visualizations
-- Forecast charts with historical context
-- CSV export of all forecasts
-
-#### Notebook
-
-- `notebooks/05_forecasting.ipynb`: Complete forecasting workflow
-
-### Running the Dashboard
+## Running the Dashboard
 
 ```bash
 streamlit run dashboard/app.py
 ```
 
-### Running Tests
+## Running Tests
 
 ```bash
 pytest tests/
@@ -358,106 +236,24 @@ pytest tests/
 
 ### Account Ownership Stagnation (2021-2024)
 
-Despite 65M+ mobile money accounts being opened, account ownership grew only +3pp. Potential factors:
-
+Despite 65M+ mobile money accounts, account ownership grew only +3pp. Potential factors:
 - Registered vs. active account gap
 - Limited usage beyond registration
 - Financial literacy barriers
 - Trust and security concerns
-- Infrastructure gaps in rural areas
-
-### Data Gaps
-
-- Sparse indicator coverage (<5 observations for some indicators)
-- Limited disaggregated data (gender, urban/rural)
-- Missing infrastructure time series data
 
 ## Architecture
 
-### OOP Design
-
-Both Task 1 and Task 2 modules follow object-oriented design principles:
-
-- **Separation of Concerns**: Dedicated classes for different functionalities
-- **Reusability**: Modular design for easy extension
-- **Type Safety**: Dataclasses and enums
-- **Logging**: Comprehensive logging throughout
-- **Error Handling**: Graceful handling of missing data
-
-### Task 1 Classes
-
-- `Task1DataProcessor`: Main processor combining exploration and enrichment
-- `DataExplorer`: Data exploration and analysis
-- `DataEnricher`: Data enrichment operations
-- `ObservationRecord`, `EventRecord`, `ImpactLinkRecord`: Type-safe data classes
-
-### Task 2 Classes
-
-- `ExploratoryDataAnalyzer`: Comprehensive EDA operations
-- `EDAResults`: Container for all analysis results
-
-### Task 3 Classes
-
-- `EventImpactModeler`: Event impact modeling operations
-- `EventImpactModel`: Container for model results
-- `ImpactEstimate`: Type-safe impact estimate data class
-
-### Task 4 Classes
-
-- `FinancialInclusionForecaster`: Forecasting operations
-- `ForecastingModel`: Container for forecast results
-- `ForecastResult`: Type-safe forecast result data class
-
-## Output
-
-### Visualizations
-
-All visualizations are automatically saved to `reports/figures/` with high resolution (300 DPI):
-
-- Temporal coverage charts
-- Account ownership trajectory plots
-- Gender gap visualizations
-- Urban/rural comparisons
-- Mobile money trends
-- Event timeline visualizations
-- Correlation heatmaps
-- Event overlay charts
-
-### Data Files
-
-- Enriched datasets saved to `data/processed/`
-- All figures saved to `reports/figures/`
-
-## Logging
-
-All modules include comprehensive logging:
-
-- **INFO**: Normal operations
-- **WARNING**: Potential issues or missing data
-- **ERROR**: Errors that need attention
-- **DEBUG**: Detailed debugging information
-
-Logs include timestamps, module names, and detailed messages.
-
-## Development
-
-### Branch Structure
-
-- `main`: Main development branch
-- `task-1`: Task 1 implementation branch
-- `task-2`: Task 2 implementation branch
-
-### Commit Messages
-
-Follow conventional commit format:
-- `feat(task1): Description` for new features
-- `fix(task2): Description` for bug fixes
-- `docs: Description` for documentation
+All modules follow OOP design principles with comprehensive logging:
+- **Task 1**: `Task1DataProcessor`, `DataExplorer`, `DataEnricher`
+- **Task 2**: `ExploratoryDataAnalyzer`
+- **Task 3**: `EventImpactModeler`
+- **Task 4**: `FinancialInclusionForecaster`
+- **Task 5**: `DashboardDataLoader`, `DashboardVisualizations`
 
 ## Requirements
 
 See `requirements.txt` for full list. Key dependencies:
-
 - pandas >= 1.5.0
 - numpy >= 1.23.0
 - matplotlib >= 3.6.0
