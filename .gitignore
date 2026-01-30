@@ -1,0 +1,145 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+venv/
+ENV/
+env/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb_checkpoints/
+# Note: *.ipynb files in notebooks/ directory should be tracked
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Data files - keep structure but ignore actual data
+data/raw/*.csv
+data/raw/*.xlsx
+data/raw/*.xls
+data/raw/*.parquet
+data/raw/*.feather
+data/raw/*.h5
+data/raw/*.hdf5
+data/processed/*
+!data/processed/.gitkeep
+!data/raw/.gitkeep
+
+# Model files
+models/*.pkl
+models/*.pickle
+models/*.joblib
+models/*.h5
+models/*.hdf5
+models/*.pt
+models/*.pth
+models/*.onnx
+models/*.pb
+models/*.tflite
+models/*.sav
+!models/.gitkeep
+
+# Reports and figures
+reports/figures/*.png
+reports/figures/*.jpg
+reports/figures/*.jpeg
+reports/figures/*.pdf
+reports/figures/*.svg
+reports/figures/*.gif
+reports/*.html
+reports/*.pdf
+!reports/figures/.gitkeep
+
+# Streamlit
+.streamlit/secrets.toml
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# Testing
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+*.cover
+*.py,cover
+.hypothesis/
+.cache
+nosetests.xml
+coverage.xml
+
+# Logs
+*.log
+logs/
+*.log.*
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*~
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Compressed files
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z
+
+# Large files (uncomment if needed)
+# *.csv
+# *.xlsx
+# *.parquet
