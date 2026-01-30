@@ -16,12 +16,14 @@ Project for forecasting financial inclusion in Ethiopia using comprehensive data
 │   ├── 01_data_exploration.ipynb  # Task 1: Data exploration
 │   ├── 02_data_enrichment.ipynb   # Task 1: Data enrichment
 │   ├── 03_eda.ipynb               # Task 2: Exploratory Data Analysis
-│   └── 04_impact_modeling.ipynb   # Task 3: Event Impact Modeling
+│   ├── 04_impact_modeling.ipynb   # Task 3: Event Impact Modeling
+│   └── 05_forecasting.ipynb       # Task 4: Forecasting Access and Usage
 ├── src/
 │   ├── __init__.py
 │   ├── task1_data_exploration.py  # Task 1: OOP data exploration & enrichment
 │   ├── task2_eda.py                # Task 2: OOP exploratory data analysis
-│   └── task3_impact_modeling.py    # Task 3: OOP event impact modeling
+│   ├── task3_impact_modeling.py    # Task 3: OOP event impact modeling
+│   └── task4_forecasting.py         # Task 4: OOP forecasting module
 ├── dashboard/
 │   └── app.py                      # Streamlit dashboard
 ├── tests/
@@ -272,6 +274,67 @@ validation = modeler.validate_against_historical(
 
 - `notebooks/04_impact_modeling.ipynb`: Complete impact modeling workflow
 
+### Task 4: Forecasting Access and Usage
+
+Forecast Account Ownership (Access) and Digital Payment Usage for 2025-2027.
+
+#### Quick Start
+
+```python
+import sys
+from pathlib import Path
+import logging
+
+sys.path.append(str(Path('src').resolve()))
+from task4_forecasting import FinancialInclusionForecaster
+
+# Initialize forecaster
+forecaster = FinancialInclusionForecaster(
+    data_file=Path('data/raw/ethiopia_fi_unified_data.xlsx'),
+    impact_model_file=Path('data/processed/association_matrix.csv'),
+    figure_dir=Path('reports/figures')
+)
+
+# Extract time series
+series = forecaster.extract_indicator_series('ACC_OWNERSHIP', pillar='access')
+
+# Generate forecast
+forecast = forecaster.linear_trend_forecast(
+    series=series,
+    forecast_years=[2025, 2026, 2027]
+)
+
+# Generate scenarios
+scenarios = forecaster.scenario_forecast(forecast)
+```
+
+#### Features
+
+- **Trend Regression**: Linear and logarithmic trend forecasting
+- **Event-Augmented Model**: Combine trend with event impacts
+- **Scenario Analysis**: Optimistic, base, and pessimistic scenarios
+- **Confidence Intervals**: Quantify uncertainty in forecasts
+- **Visualization**: Forecast charts with historical data and confidence bands
+- **Forecast Tables**: Comprehensive tables with all scenarios
+
+#### Forecasting Methods
+
+1. **Linear Trend**: Simple linear regression on historical data
+2. **Log Trend**: Logarithmic transformation for non-linear growth
+3. **Event-Augmented**: Trend + event effects from impact model
+4. **Scenarios**: Multiple scenarios with different multipliers
+
+#### Output
+
+- Forecast tables with confidence intervals
+- Scenario visualizations
+- Forecast charts with historical context
+- CSV export of all forecasts
+
+#### Notebook
+
+- `notebooks/05_forecasting.ipynb`: Complete forecasting workflow
+
 ### Running the Dashboard
 
 ```bash
@@ -338,6 +401,12 @@ Both Task 1 and Task 2 modules follow object-oriented design principles:
 - `EventImpactModeler`: Event impact modeling operations
 - `EventImpactModel`: Container for model results
 - `ImpactEstimate`: Type-safe impact estimate data class
+
+### Task 4 Classes
+
+- `FinancialInclusionForecaster`: Forecasting operations
+- `ForecastingModel`: Container for forecast results
+- `ForecastResult`: Type-safe forecast result data class
 
 ## Output
 

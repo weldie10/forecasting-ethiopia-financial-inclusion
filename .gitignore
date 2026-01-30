@@ -42,7 +42,7 @@ env/
 *.sublime-workspace
 
 # Jupyter Notebook
-.ipynb_checkpoints
+.ipynb_checkpoints/
 *.ipynb_checkpoints/
 # Note: *.ipynb files in notebooks/ directory should be tracked
 
@@ -59,9 +59,22 @@ data/raw/*.parquet
 data/raw/*.feather
 data/raw/*.h5
 data/raw/*.hdf5
+!data/raw/.gitkeep
+
+# Processed data - ignore all generated files
 data/processed/*
 !data/processed/.gitkeep
-!data/raw/.gitkeep
+
+# Forecast and analysis outputs
+data/processed/forecasts.csv
+data/processed/*_enriched.xlsx
+data/processed/association_matrix.csv
+forecasts_*.csv
+forecast_results_*.xlsx
+scenario_*.csv
+*_analysis.csv
+*_results.xlsx
+*_summary.xlsx
 
 # Model files
 models/*.pkl
@@ -84,12 +97,16 @@ reports/figures/*.jpeg
 reports/figures/*.pdf
 reports/figures/*.svg
 reports/figures/*.gif
+reports/figures/*.eps
 reports/*.html
 reports/*.pdf
+reports/*.xlsx
+reports/*.csv
 !reports/figures/.gitkeep
 
 # Streamlit
 .streamlit/secrets.toml
+.streamlit/cache/
 
 # OS
 .DS_Store
