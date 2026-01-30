@@ -15,11 +15,13 @@ Project for forecasting financial inclusion in Ethiopia using comprehensive data
 ├── notebooks/
 │   ├── 01_data_exploration.ipynb  # Task 1: Data exploration
 │   ├── 02_data_enrichment.ipynb   # Task 1: Data enrichment
-│   └── 03_eda.ipynb               # Task 2: Exploratory Data Analysis
+│   ├── 03_eda.ipynb               # Task 2: Exploratory Data Analysis
+│   └── 04_impact_modeling.ipynb   # Task 3: Event Impact Modeling
 ├── src/
 │   ├── __init__.py
 │   ├── task1_data_exploration.py  # Task 1: OOP data exploration & enrichment
-│   └── task2_eda.py                # Task 2: OOP exploratory data analysis
+│   ├── task2_eda.py                # Task 2: OOP exploratory data analysis
+│   └── task3_impact_modeling.py    # Task 3: OOP event impact modeling
 ├── dashboard/
 │   └── app.py                      # Streamlit dashboard
 ├── tests/
@@ -186,6 +188,90 @@ results = eda.run_full_eda()
 
 - `notebooks/03_eda.ipynb`: Complete EDA workflow with all visualizations
 
+### Task 3: Event Impact Modeling
+
+Model how events (policies, product launches, infrastructure investments) affect financial inclusion indicators.
+
+#### Quick Start
+
+```python
+import sys
+from pathlib import Path
+import logging
+
+sys.path.append(str(Path('src').resolve()))
+from task3_impact_modeling import EventImpactModeler
+
+# Initialize modeler
+modeler = EventImpactModeler(
+    data_file=Path('data/raw/ethiopia_fi_unified_data.xlsx'),
+    figure_dir=Path('reports/figures')
+)
+
+# Load and join data
+modeler.load_data()
+modeler.join_impact_with_events()
+
+# Build association matrix
+matrix = modeler.build_association_matrix()
+
+# Validate against historical data
+validation = modeler.validate_against_historical(
+    event_name='Telebirr',
+    indicator_code='ACC_MM_ACCOUNT',
+    observed_before=4.7,
+    observed_after=9.45,
+    event_date=datetime(2021, 5, 1)
+)
+```
+
+#### Features
+
+- **Impact Data Integration**: Join impact_links with events using parent_id
+- **Association Matrix**: Build event-indicator matrix showing which events affect which indicators
+- **Effect Modeling**: Model effects over time (immediate, gradual, delayed)
+- **Effect Combination**: Combine effects from multiple events (additive, multiplicative, max)
+- **Historical Validation**: Test model predictions against observed data
+- **Estimate Refinement**: Refine impact estimates based on validation results
+- **Comparable Evidence**: Framework for incorporating evidence from similar contexts
+- **Methodology Documentation**: Automatic documentation of assumptions and limitations
+
+#### Analysis Capabilities
+
+1. **Impact Understanding**
+   - Load and join impact_links with events
+   - Summarize which events affect which indicators
+   - Analyze impact directions and magnitudes
+
+2. **Association Matrix**
+   - Build event-indicator association matrix
+   - Visualize as heatmap
+   - Identify key relationships
+
+3. **Effect Modeling**
+   - Immediate effects (instant impact)
+   - Gradual effects (build over time)
+   - Delayed effects (after lag period)
+
+4. **Effect Combination**
+   - Additive combination (sum of effects)
+   - Multiplicative combination (compound effects)
+   - Maximum effect (take max)
+
+5. **Validation**
+   - Compare predictions with historical data
+   - Calculate alignment metrics
+   - Identify areas needing refinement
+
+6. **Refinement**
+   - Adjust estimates based on validation
+   - Document reasoning for changes
+   - Track confidence levels
+
+#### Notebook
+
+- `notebooks/04_impact_modeling.ipynb`: Complete impact modeling workflow
+
 ### Running the Dashboard
 
 ```bash
@@ -246,6 +332,12 @@ Both Task 1 and Task 2 modules follow object-oriented design principles:
 
 - `ExploratoryDataAnalyzer`: Comprehensive EDA operations
 - `EDAResults`: Container for all analysis results
+
+### Task 3 Classes
+
+- `EventImpactModeler`: Event impact modeling operations
+- `EventImpactModel`: Container for model results
+- `ImpactEstimate`: Type-safe impact estimate data class
 
 ## Output
 
